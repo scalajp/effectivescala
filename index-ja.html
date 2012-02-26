@@ -126,11 +126,11 @@
 <li><strong><a href="#コレクション">コレクション</a></strong>: <em><a href="#コレクション-階層">階層</a></em>, <em><a href="#コレクション-利用">利用</a></em>, <em><a href="#コレクション-スタイル">スタイル</a></em>, <em><a href="#コレクション-性能">性能</a></em>, <em><a href="#コレクション-Javaコレクション">Javaコレクション</a></em></li>
 <li><strong><a href="#並行性">並行性</a></strong>: <em><a href="#並行性-Future">Future</a></em>, <em><a href="#並行性-コレクション">コレクション</a></em></li>
 <li><strong><a href="#制御構造">制御構造</a></strong>: <em><a href="#制御構造-再帰">再帰</a></em>, <em><a href="#制御構造-Return">Return</a></em>, <em><a href="#制御構造-`for`ループと内包"><code>for</code>ループと内包</a></em>, <em><a href="#制御構造-`require`と`assert`"><code>require</code>と<code>assert</code></a></em></li>
-<li><strong><a href="#Functional programming">Functional programming</a></strong>: <em><a href="#Functional programming-Case classes as algebraic data types">Case classes as algebraic data types</a></em>, <em><a href="#Functional programming-Options">Options</a></em>, <em><a href="#Functional programming-Pattern matching">Pattern matching</a></em>, <em><a href="#Functional programming-Partial functions">Partial functions</a></em>, <em><a href="#Functional programming-Destructuring bindings">Destructuring bindings</a></em>, <em><a href="#Functional programming-Lazyness">Lazyness</a></em>, <em><a href="#Functional programming-Call by name">Call by name</a></em>, <em><a href="#Functional programming-`flatMap`"><code>flatMap</code></a></em></li>
+<li><strong><a href="#関数型プログラミング">関数型プログラミング</a></strong>: <em><a href="#関数型プログラミング-代数的データ型としてのケースクラス">代数的データ型としてのケースクラス</a></em>, <em><a href="#関数型プログラミング-オプション">オプション</a></em>, <em><a href="#関数型プログラミング-パターンマッチング">パターンマッチング</a></em>, <em><a href="#関数型プログラミング-部分関数">部分関数</a></em>, <em><a href="#関数型プログラミング-分配束縛(Destructuring bindings)">分配束縛(Destructuring bindings)</a></em>, <em><a href="#関数型プログラミング-遅延">遅延</a></em>, <em><a href="#関数型プログラミング-名前呼び出し">名前呼び出し</a></em>, <em><a href="#関数型プログラミング-`flatMap`"><code>flatMap</code></a></em></li>
 <li><strong><a href="#オブジェクト指向プログラミング">オブジェクト指向プログラミング</a></strong>: <em><a href="#オブジェクト指向プログラミング-依存性注入">依存性注入</a></em>, <em><a href="#オブジェクト指向プログラミング-トレイト">トレイト</a></em>, <em><a href="#オブジェクト指向プログラミング-可視性">可視性</a></em>, <em><a href="#オブジェクト指向プログラミング-構造的型(？正確な訳？)">構造的型(？正確な訳？)</a></em></li>
 <li><strong><a href="#ガベージコレクション">ガベージコレクション</a></strong></li>
 <li><strong><a href="#Java 互換性">Java 互換性</a></strong></li>
-<li><strong><a href="#Twitter's standard libraries">Twitter&rsquo;s standard libraries</a></strong>: <em><a href="#Twitter's standard libraries-Futures">Futures</a></em></li>
+<li><strong><a href="#Twitterの標準ライブラリ">Twitterの標準ライブラリ</a></strong>: <em><a href="#Twitterの標準ライブラリ-Futures">Futures</a></em></li>
 <li><strong><a href="#Acknowledgments">Acknowledgments</a></strong></li>
 </ul>
 
@@ -573,7 +573,7 @@ val buffer: scala.collection.mutable.Buffer[Int] = list.asScala
 
 <p>Futureを使って並行性を管理しよう。Futureは、並行操作とリソース管理を疎結合にする。例えば、<a href="http://github.com/twitter/finagle">Finagle</a>は、並行操作をわずかなスレッド数で効率的に多重化する。Scalaには、軽量なクロージャリテラルの構文がある。だから、Futureは構文上の負担が小さく、ほとんどのプログラマが身に付けることができる。</p>
 
-<p>Futureは、プログラマが並行計算を宣言的なスタイルで表現できるようにする。Futureは組み立て可能で、また計算の失敗を原則に沿って処理できる。こうした性質から、Futureは関数型プログラミング言語にとても適しており、推奨されるスタイルだと確信している。</p>
+<p>Futureは、プログラマが並行計算を宣言的なスタイルで表現できるようにする。Futureは合成可能で、また計算の失敗を原則に沿って処理できる。こうした性質から、Futureは関数型プログラミング言語にとても適しており、推奨されるスタイルだと確信している。</p>
 
 <p><em>生成したFutureを変換しよう。</em>Futureの変換を使うと、失敗の伝播やキャンセルの通知が行われることを保証できる。また、プログラマは、Javaメモリモデルの影響を検討する必要がなくなる。RPCを順番に10回発行して結果を表示するとき、注意深いプログラマでさえ、以下のように書いてしまうかもしれない:</p>
 
@@ -757,7 +757,7 @@ elaborate..
 
 <h3><code>for</code>ループと内包</h3>
 
-<p><code>for</code>を使うと、ループと集約を簡潔かつ自然に表現できる。<code>for</code>は、多数のシーケンスを平坦化する場合に特に有用だ。<code>for</code>の構文は、内部的にはクロージャを割り当てて呼び出していることを覆い隠している。このため、予期しないコストが発生したり、予想外の挙動を示したりする。例えば、</p>
+<p><code>for</code>を使うと、ループと集約を簡潔かつ自然に表現できる。<code>for</code>は、多数のシーケンスを平坦化(flatten)する場合に特に有用だ。<code>for</code>の構文は、内部的にはクロージャを割り当てて呼び出していることを覆い隠している。このため、予期しないコストが発生したり、予想外の挙動を示したりする。例えば、</p>
 
 <pre><code>for (item &lt;- container) {
   if (item != 2) return
@@ -786,39 +786,24 @@ assert(stream != null)
 }
 </code></pre>
 
-<p><a id="Functional programming" /></p>
+<p><a id="関数型プログラミング" /></p>
 
-<h2>Functional programming</h2>
+<h2>関数型プログラミング</h2>
 
-<p><em>Value oriented</em> programming confers many advantages, especially when
-used in conjunction with functional programming constructs. This style
-emphasizes the transformation of values over stateful mutation,
-yielding code that is referentially transparent, providing stronger
-invariants and thus also easier to reason about. Case classes, pattern
-matching, destructuring bindings, type inference, and lightweight
-closure and method creation syntax are the tools of this trade.</p>
+<p><em>値指向</em> プログラミングは多くの長所を、特に関数型プログラミングの構成物と一体的に利用するときにであるが、享受(confer)する。このスタイルはステートフルな変更よりも値の変換を強調し、参照透過(referentially transparent)であるコードを生み出し、より強い不変式(invariants)を提供し、それ故に、その変換を推論することも容易にする。ケースクラスや、パターンマッチング、destructuring-bind(未訳)、型推論、軽量なクロージャ、メソッド生成構文は、この職業の道具達である。</p>
 
-<p><a id="Functional programming-Case classes as algebraic data types" /></p>
+<p><a id="関数型プログラミング-代数的データ型としてのケースクラス" /></p>
 
-<h3>Case classes as algebraic data types</h3>
+<h3>代数的データ型としてのケースクラス</h3>
 
-<p>Case classes encode ADTs: they are useful for modelling a large number
-of data structures and provide for succinct code with strong
-invariants, especially when used in conjunction with pattern matching.
-The pattern matcher implements exhaustivity analysis providing even
-stronger static guarantees.</p>
-
-<p>Use the following pattern when encoding ADTs with case classes:</p>
+<p>ケースクラスは、ADT(訳注:Abstract Data Type、抽象データ型)を符号化する。ケースクラスは、大量のデータ構造をモデリングしたり、強力な不変式(invariants)を持つ簡潔なコードを提供したりすることに有用であり、特にパターンマッチングと組み合わせた時に効果を発揮する。パターンマッチャーは、より強力な静的保証さえ提供することができる包括的分析(exhaustivity analysis)を実装する。ケースクラスでADTをエンコードするときは次のパターンを利用する。</p>
 
 <pre><code>sealed trait Tree[T]
 case class Node[T](left: Tree[T], right: Tree[T]) extends Tree[T]
 case class Leaf[T](value: T) extends Tree[T]
 </code></pre>
 
-<p class="LP">the type <code>Tree[T]</code> has two constructors: <code>Node</code> and <code>Leaf</code>. Declaring the type <code>sealed</code> allows the compiler to do exhaustivity analysis since constructors cannot be added outside the source file.</p>
-
-<p>Together with pattern matching, such modelling results in code that is
-both succinct &ldquo;obviously correct&rdquo;:</p>
+<p></code>型は、<code>Node</code> と <code>Leaf</code> という2つのコンストラクタを持つ。型を <code>sealed</code> に宣言することで、当該ソースファイルの外側でコンストラクタを追加することはできないから、コンパイラに包括的分析(exhaustivity analysis)をさせるようにできる。パターンマッチングと共に利用することで、そのようなモデリングは、両方とも簡潔に&ldquo;明らかに正しい&rdquo;コードをもたらす。</p>
 
 <pre><code>def findMin[T &lt;: Ordered[T]](tree: Tree[T]) = tree match {
   case Node(left, right) =&gt; Seq(findMin(left), findMin(right)).min
@@ -826,53 +811,43 @@ both succinct &ldquo;obviously correct&rdquo;:</p>
 }
 </code></pre>
 
-<p>While recursive structures like trees constitute classic applications of
-ADTs, their domain of usefulness is much larger. Disjoint unions in particular are
-readily modelled with ADTs; these occur frequently in state machines.</p>
+<p>木のような再帰的な構造が古典的なアプリケーションのADTを構成する一方で、有用性のある領域はもっと大きいのである。特に結合(unions)の解体は、容易にADTにモデル化される。これらはステートマシンでしばしば発生する。</p>
 
-<p><a id="Functional programming-Options" /></p>
+<p><a id="関数型プログラミング-オプション" /></p>
 
-<h3>Options</h3>
+<h3>オプション</h3>
 
-<p>The <code>Option</code> type is a container that is either empty (<code>None</code>) or full
-(<code>Some(value)</code>). They provide a safe alternative to the use of <code>null</code>,
-and should be used in their stead whenever possible. They are a
-collection (of at most one item) and they are embellished with
-collection operations &mdash; use them!</p>
+<p><code>Option</code>型は、空であること(<code>None</code>)、または満たされていること(<code>Some(value)</code>)を表す容器である。<code>null</code>に対する安全な代替手段を提供し、可能な限り如何なる時も利用されるべきである。<code>Option</code>型は、たかだかひとつの要素を持つコレクションであり、コレクションの操作で装飾される。利用しよう！</p>
 
-<p>Write</p>
+<p>こう書く</p>
 
 <pre><code>var username: Option[String] = None
 ...
 username = Some(&quot;foobar&quot;)
 </code></pre>
 
-<p class="LP">instead of</p>
+<p class="LP">下記の代わりにである。</p>
 
 <pre><code>var username: String = null
 ...
 username = &quot;foobar&quot;
 </code></pre>
 
-<p class="LP">since the former is safer: the <code>Option</code> type statically enforces that <code>username</code> must be checked for emptyness.</p>
+<p class="LP"><code>Option</code>型が<code>username</code>が空であるかをチェックしなければならないことを静的に強制するため、前者はより安全だからである。</p>
 
-<p>Conditional execution on an <code>Option</code> value should be done with
-<code>foreach</code>; instead of</p>
+<p><code>Option</code>の値の条件節の実行は<code>foreach</code>を使うべきである。下記の代わりに、</p>
 
 <pre><code>if (opt.isDefined)
   operate(opt.get)
 </code></pre>
 
-<p class="LP">write</p>
+<p class="LP">このように書く</p>
 
 <pre><code>opt foreach { value =&gt;
-  operate(value)
-}
+  operate(value)}
 </code></pre>
 
-<p>The style may seem odd, but provides greater safety (we don&rsquo;t call the
-exceptional <code>get</code>) and brevity. If both branches are taken, use
-pattern matching:</p>
+<p>奇妙なスタイルに思えるかもしれないが、よりよい安全性を提供(例外を引き起こしうる<code>get</code>を呼んでいない)し、簡潔である。両方の選択肢が利用されうるなら、パターンマッチングを使う。</p>
 
 <pre><code>opt match {
   case Some(value) =&gt; operate(value)
@@ -880,38 +855,35 @@ pattern matching:</p>
 }
 </code></pre>
 
-<p class="LP">but if all that's missing is a default value, use <code>getOrElse</code></p>
+<p class="LP">しかし、もし足りないものがデフォルト値だけであるなら、<code>getOrElse</code> を使う。</p>
 
 <pre><code>operate(opt getOrElse defaultValue)
 </code></pre>
 
-<p>Do not overuse <code>Option</code>: if there is a sensible
-default &mdash; a <a href="http://en.wikipedia.org/wiki/Null_Object_pattern"><em>Null Object</em></a> &mdash; use that instead.</p>
+<p><code>Option</code>を使いすぎてはいけない。もし、何か道理にかなった既定値、<a href="http://en.wikipedia.org/wiki/Null_Object_pattern"><em>Null Object</em></a>、があるなら、代わりにそれを使う。</p>
 
-<p><code>Option</code> also comes with a handy constructor for wrapping nullable values:</p>
+<p><code>Option</code>は、また、nullになりうる値を包む扱いやすいコンストラクターと共に使う。</p>
 
 <pre><code>Option(getClass.getResourceAsStream(&quot;foo&quot;))
 </code></pre>
 
-<p class="LP">is an <code>Option[InputStream]</code> that assumes a value of <code>None</code> should <code>getResourceAsStream</code> return <code>null</code>.</p>
+<p class="LP">は、<code>Option[InputStream]</code> であり、<code>getResourceAsStream</code> が <code>null</code> を返す場合に、<code>None</code>  という値を返すものである。</p>
 
-<p><a id="Functional programming-Pattern matching" /></p>
+<p><a id="関数型プログラミング-パターンマッチング" /></p>
 
-<h3>Pattern matching</h3>
+<h3>パターンマッチング</h3>
 
-<p>Pattern matches (<code>x match { ...</code>) are pervasive in well written Scala
-code: they conflate conditional execution, destructuring, and casting
-into one construct. Used well they enhance both clarity and safety.</p>
+<p>パターンマッチ(<code>x match { ...</code>)は、書かれた Scala コードの見通しを良くする。パターンマッチは条件実行および非構造化(destructuring)、ひとつの構成物へのキャストを合成する。うまく使われたなら、明快さと安全さの両方をより高めてくれる。</p>
 
-<p>Use pattern matching to implement type switches:</p>
+<p>型のスイッチを実装するためにパターンマッチを使う。</p>
 
 <pre><code>obj match {
   case str: String =&gt; ...
   case addr: SocketAddress =&gt; ...
 </code></pre>
 
-<p>Pattern matching works best when also combined with destructuring (for
-example if you are matching case classes); instead of</p>
+<p>パターンマッチは、非構造化(destrcturing)とあわせて利用された時に最もよく動作する(たとえば、もしケースクラスをマッチングするなら)
+次の例の代わりに</p>
 
 <pre><code>animal match {
   case dog: Dog =&gt; &quot;dog (%s)&quot;.format(dog.breed)
@@ -919,7 +891,7 @@ example if you are matching case classes); instead of</p>
   }
 </code></pre>
 
-<p class="LP">write</p>
+<p class="LP">このように書く</p>
 
 <pre><code>animal match {
   case Dog(breed) =&gt; &quot;dog (%s)&quot;.format(breed)
@@ -927,12 +899,12 @@ example if you are matching case classes); instead of</p>
 }
 </code></pre>
 
-<p>Write <a href="http://www.scala-lang.org/node/112">custom extractors</a> but only with
+<p><a href="http://www.scala-lang.org/node/112">カスタム抽出子</a> を書こう。しかし、二重コンストラクタ(<code>apply</code>) (dual constructor) と利用する場合のみだ。
+そうでなければ、不適当な利用法になるかもしれない。
 a dual constructor (<code>apply</code>), otherwise their use may be out of place.</p>
 
-<p>Don&rsquo;t use pattern matching for conditional execution when defaults
-make more sense. The collections libraries usually provide methods
-that return <code>Option</code>s; avoid</p>
+<p>デフォルト値が、もっと意味が取れるものであるとき条件実行にパターンマッチングを使わないようにする。
+コレクションライブラリは通常<code>Option</code>を返すメソッドを提供する。次の例は避けよ。</p>
 
 <pre><code>val x = list match {
   case head :: _ =&gt; head
@@ -940,25 +912,25 @@ that return <code>Option</code>s; avoid</p>
 }
 </code></pre>
 
-<p class="LP">because</p>
+<p class="LP">なぜなら</p>
 
 <pre><code>val x = list.headOption getOrElse default
 </code></pre>
 
-<p class="LP">is both shorter and communicates purpose.</p>
+<p class="LP">は、より短く、意図を伝達する。</p>
 
-<p><a id="Functional programming-Partial functions" /></p>
+<p><a id="関数型プログラミング-部分関数" /></p>
 
-<h3>Partial functions</h3>
+<h3>部分関数</h3>
 
-<p>Scala provides syntactical shorthand for defining a <code>PartialFunction</code>:</p>
+<p>Scala は <code>PartialFunction</code> を定義するための構文上の簡略的記法を提供する。</p>
 
 <pre><code>val pf: PartialFunction[Int, String] = {
   case i if i%2 == 0 =&gt; &quot;even&quot;
 }
 </code></pre>
 
-<p class="LP">and they may be composed with <code>orElse</code></p>
+<p class="LP">また、<code>orElse</code> と組み合わせられるかもしれない。</p>
 
 <pre><code>val tf: (Int =&gt; String) = pf orElse { case _ =&gt; &quot;odd&quot;}
 
@@ -966,9 +938,7 @@ tf(1) == &quot;odd&quot;
 tf(2) == &quot;even&quot;
 </code></pre>
 
-<p>Partial functions arise in many situations and are effectively
-encoded with <code>PartialFunction</code>, for example as arguments to
-methods</p>
+<p>部分関数は多くの場面で起こり得るし，たとえば、メソッドの引数として、<code>PartialFunction</code>で効果的に符号化される。</p>
 
 <pre><code>trait Publisher[T] {
   def subscribe(f: PartialFunction[T, Unit])
@@ -982,18 +952,18 @@ publisher.subscribe {
 }
 </code></pre>
 
-<p class="LP">or in situations that might otherwise call for returning an <code>Option</code>:</p>
+<p class="LP">もしくは <code>Option</code> を返すような呼び出しの場面において、</p>
 
 <pre><code>// Attempt to classify the the throwable for logging.
 type Classifier = Throwable =&gt; Option[java.util.logging.Level]
 </code></pre>
 
-<p class="LP">might be better expressed with a <code>PartialFunction</code></p>
+<p class="LP">は、<code>PartialFunction</code>で表現される方がよりよいかもしれない。</p>
 
 <pre><code>type Classifier = PartialFunction[Throwable, java.util.Logging.Level]
 </code></pre>
 
-<p class="LP">as it affords greater composability:</p>
+<p class="LP">より優れた構成可能性(composability)を与えるからだ。</p>
 
 <pre><code>val classifier1: Classifier
 val classifier2: Classifier
@@ -1001,14 +971,13 @@ val classifier2: Classifier
 val classifier = classifier1 orElse classifier2 orElse { _ =&gt; java.util.Logging.Level.FINEST }
 </code></pre>
 
-<p><a id="Functional programming-Destructuring bindings" /></p>
+<p><a id="関数型プログラミング-分配束縛(Destructuring bindings)" /></p>
 
-<h3>Destructuring bindings</h3>
+<h3>分配束縛(Destructuring bindings)</h3>
 
-<p>Destructuring value bindings are related to pattern matching; they use the same
-mechanism but are applicable when there is exactly one option (lest you accept
-the possibility of an exception). Destructuring binds are particularly useful for
-tuples and case classes.</p>
+<p>分配値束縛は、パターンマッチングに関係している。同じメカニズムを利用しているが、
+(例外の可能性を許容しないために)正確にひとつの選択肢があるときだけ適用可能である。
+分配束縛は特にタプルとケースクラスで有用である。</p>
 
 <pre><code>val tuple = ('a', 1)
 val (char, digit) = tuple
@@ -1017,18 +986,17 @@ val tweet = Tweet(&quot;just tweeting&quot;, Time.now)
 val Tweet(text, timestamp) = tweet
 </code></pre>
 
-<p><a id="Functional programming-Lazyness" /></p>
+<p><a id="関数型プログラミング-遅延" /></p>
 
-<h3>Lazyness</h3>
+<h3>遅延</h3>
 
-<p>Fields in scala are computed <em>by need</em> when <code>val</code> is prefixed with
-<code>lazy</code>. Because fields and methods are equivalent in Scala (lest the fields
-are <code>private[this]</code>)</p>
+<p>Scala のフィールドは、<code>val</code> が <code>lazy</code> プレフィックスと共に使われた時は <em>必要に応じて</em> 演算される。
+なぜなら、フィールドとメソッドは Scala では等価だからである(フィールドが <code>private[this]</code> にならないように)。</p>
 
 <pre><code>lazy val field = computation()
 </code></pre>
 
-<p class="LP">is (roughly) short-hand for</p>
+<p class="LP">は、(概して) 簡略的記法で、</p>
 
 <pre><code>var _theField = None
 def field = if (_theField.isDefined) _theField.get else {
@@ -1037,60 +1005,58 @@ def field = if (_theField.isDefined) _theField.get else {
 }
 </code></pre>
 
-<p class="LP">i.e., it computes a results and memoizes it. Use lazy fields for this purpose, but avoid using lazyness when lazyness is required by semantics. In these cases it's better to be explicit since it makes the cost model explicit, and side effects can be controlled more precisely.</p>
+<p class="LP">すなわち、結果を演算し記憶する。この目的のために遅延フィールドを使うようにし、しかし、遅延がセマンティクスによって要求されるときに遅延を使うことを避ける。</p>
 
-<p>Lazy fields are thread safe.</p>
+<p>このようなケースにおいて、コストモデルを明確にし、副作用がより正確に制御されるから、明示的であることがよりよい。</p>
 
-<p><a id="Functional programming-Call by name" /></p>
+<p>遅延フィールドはスレッドセーフである。</p>
 
-<h3>Call by name</h3>
+<p><a id="関数型プログラミング-名前呼び出し" /></p>
 
-<p>Method parameters may be specified by-name, meaning the parameter is
-bound not to a value but to a <em>computation</em> that may be repeated. This
-feature must be applied with care; a caller expecting by-value
-semantics will be surprised. The motivation for this feature is to
-construct syntactically natural DSLs &mdash; new control constructs in
-particular can be made to look much like native language features.</p>
+<h3>名前呼び出し</h3>
 
-<p>Only use call-by-name for such control constructs, where it is obvious
-to the caller that what is being passed in is a &ldquo;block&rdquo; rather than
-the result of an unsuspecting computation. Only use call-by-name arguments
-in the last position of the last argument list. When using call-by-name,
-ensure that method is named so that it is obvious to the caller that
-its argument is call-by-name.</p>
+<p>メソッドのパラメーターは名前によって特定されるかもしれない、その意味するところは
+パラメータは値に紐付くのではなくて、繰り返されうる <em>演算</em> に対して紐付くということである。
+この機能は気をつけて適用されなければならない。値渡しの文脈を期待している呼び出し側は驚くであろう。
+この機能の動機は構文的に自然な DSL を構築することにある。&mdash; 新しい制御構造は特に、かなりネイティブな言語機能に見えるように作ることができる</p>
 
-<p>When you do want a value to be computed multiple times, and especially
-when this computation is side effecting, use explicit functions:</p>
+<p>名前呼び出しは、そのような制御構造のためだけに使うことだ。そこでは、渡されてくるものは、
+思いも寄らない演算結果より&ldquo;ブロック&rdquo;であるということが、呼び出し側に明らかである。
+名前呼び出しは、最後の引数リストの最後の位置にある引数にだけ使うことだ。
+名前呼び出しを使うときは、呼び出し側にその引数が名前呼び出しであることが明確に伝わるようにメソッドには名称をつけることを確実におこなう。</p>
+
+<p>値を複数回演算させたいとき、また特にその演算が副作用を持つとき、陽関数(explicit functions)を使う。</p>
 
 <pre><code>class SSLConnector(mkEngine: () =&gt; SSLEngine)
 </code></pre>
 
-<p class="LP">The intent remains obvious and caller is left without surprises.</p>
+<p class="LP">その意図は明確なままであり、呼び出し側が驚かずに済む。</p>
 
-<p><a id="Functional programming-`flatMap`" /></p>
+<p><a id="関数型プログラミング-`flatMap`" /></p>
 
 <h3><code>flatMap</code></h3>
 
-<p><code>flatMap</code> &mdash; the combination of <code>map</code> with <code>flatten</code> &mdash; deserves special
-attention, for it has subtle power and great utility. Like its brethren <code>map</code>, it is frequently
-available in nontraditional collections such as <code>Future</code> and <code>Option</code>. Its behavior
-is revealed by its signature; for some <code>Container[A]</code></p>
+<p><code>map</code> と <code>flatten</code> の合成である <code>flatMap</code> は、鋭敏な力と素晴らしい実用性を持ち、特別な注目を浴びるに値する。
+その同類である <code>map</code> のように、<code>Future</code> や <code>Option</code> といった非伝統的なコレクションにおいて、しばしば利用可能である。
+その振る舞いは、<code>Container[A]</code>といったシグネチャによって明らかになる。</p>
 
 <pre><code>flatMap[B](f: A =&gt; Container[B]): Container[B]
 </code></pre>
 
-<p class="LP"><code>flatMap</code> invokes the function <code>f</code> for the element(s) of the collection producing a <em>new</em> collection, (all of) which are flattened into its result. For example, to get all permutations of two character strings that aren't the same character repeated twice:</p>
+<p class="LP"><code>flatMap</code> は、<em>新しい</em> コレクションを生成するコレクションの各要素に対して関数 <code>f</code> を呼び出し、それら(のすべて)は、</p>
+
+<p>フラットな結果になる。例えば、次のコードは、同じ文字が繰り返されない2文字からなる文字列の順列をすべて取得する。</p>
 
 <pre><code>val chars = 'a' to 'z'
-val perms = chars flatMap { a =&gt; 
-  chars flatMap { b =&gt; 
-    if (a != b) Seq(&quot;%c%c&quot;.format(a, b)) 
-    else Seq() 
+val perms = chars flatMap { a =&gt;
+  chars flatMap { b =&gt;
+    if (a != b) Seq(&quot;%c%c&quot;.format(a, b))
+    else Seq()
   }
 }
 </code></pre>
 
-<p class="LP">which is equivalent to the more concise for-comprehension (which is &mdash; roughly &mdash; syntactical sugar for the above):</p>
+<p class="LP">これは、より簡潔な for による包含に等価である。(それは、&mdash; 荒くまとめるなら &mdash; 上記のためのシンタックスシュガーである)</p>
 
 <pre><code>val perms = for {
   a &lt;- chars
@@ -1099,8 +1065,7 @@ val perms = chars flatMap { a =&gt;
 } yield &quot;%c%c&quot;.format(a, b)
 </code></pre>
 
-<p><code>flatMap</code> is frequently useful when dealing with <code>Options</code> &mdash; it will
-collapse chains of options down to one,</p>
+<p><code>flatMap</code> は、しばしば <code>Options</code> を扱うときに有用である。 &mdash; オプションの連鎖(chain of options)を流れ落ちてひとつになる。</p>
 
 <pre><code>val host: Option[String] = ..
 val port: Option[Int] = ..
@@ -1113,7 +1078,7 @@ val addr: Option[InetSocketAddress] =
   }
 </code></pre>
 
-<p class="LP">which is also made more succinct with <code>for</code></p>
+<p class="LP">これも、<code>for</code> により、より簡潔に記述できる。</p>
 
 <pre><code>val addr: Option[InetSocketAddress] = for {
   h &lt;- host
@@ -1121,8 +1086,7 @@ val addr: Option[InetSocketAddress] =
 } yield new InetSocketAddress(h, p)
 </code></pre>
 
-<p>The use of <code>flatMap</code> in <code>Future</code>s is discussed in the
-<a href="#Twitter's%20standard%20libraries-Futures">futures section</a>.</p>
+<p><code>Future</code> における <code>flatMap</code> の利用については、<a href="#Twitter's%20standard%20libraries-Futures">futures section</a> で言及している。</p>
 
 <p><a id="オブジェクト指向プログラミング" /></p>
 
@@ -1266,49 +1230,25 @@ val addr: Option[InetSocketAddress] =
  abstract class JavaAnimal extends Animal
 </code></pre>
 
-<p><a id="Twitter's standard libraries" /></p>
+<p><a id="Twitterの標準ライブラリ" /></p>
 
-<h2>Twitter&rsquo;s standard libraries</h2>
+<h2>Twitterの標準ライブラリ</h2>
 
-<p>The most important standard libraries at Twitter are
-<a href="http://github.com/twitter/util">Util</a> and
-<a href="https://github.com/twitter/finagle">Finagle</a>. Util should be
-considered an extension to the Scala and Java standard libraries,
-providing missing functionality or more appropriate implementations. Finagle
-is our RPC system; the kernel distributed systems components.</p>
+<p>Twitterにおいて、最も重要な標準ライブラリは<a href="http://github.com/twitter/util">Util</a>と<a href="https://github.com/twitter/finagle">Finagle</a>だ。Utilは、ScalaやJavaの標準ライブラリの拡張という位置付けで、それらに欠けている機能やより適切な実装を提供する。Finagleは、TwitterのRPCシステムで、分散システムの構成要素の中核だ。</p>
 
-<p><a id="Twitter's standard libraries-Futures" /></p>
+<p><a id="Twitterの標準ライブラリ-Futures" /></p>
 
 <h3>Futures</h3>
 
-<p>Futures have been <a href="#Concurrency-Futures">discussed</a>
-briefly in the <a href="#Concurrency">concurrency section</a>. They
-are the central mechanism for coordination asynchronous
-processes and are pervasive in our codebase and core to Finagle.
-Futures allow for the composition of concurrent events, and simplifies
-reasoning about highly concurrent operations. They also lend themselves
-to a highly efficient implementation on the JVM.</p>
+<p>Futureについては、<a href="#並行性">並行性</a>の章でも少し<a href="#並行性-Future">議論した</a>。Futureは、非同期処理の連係において重要な機構で、TwitterのコードベースやFinagleのコアで広く使われている。Futureは、並行イベントの合成(composition)を可能にすると共に、高度な並行操作についての判断を単純化する。また、Futureを使うと、並行操作をJVM上で極めて効率的に実装できる。</p>
 
-<p>Twitter&rsquo;s futures are <em>asynchronous</em>, so blocking operations &mdash;
-basically any operation that can suspend the execution of its thread;
-network IO and disk IO are examples &mdash; must be handled by a system
-that itself provides futures for the results of said operations.
-Finagle provides such a system for network IO.</p>
+<p>ネットワーク入出力やディスク入出力等の操作は、基本的にスレッドの実行を一時停止する可能性がある。TwitterのFutureは<em>非同期的</em>なので、ブロックする操作(blocking operation)は、操作結果に対するFutureを提供するシステム自身によって処理されなければいけない。Finagleは、ネットワーク入出力のためのそうしたシステムを提供する。</p>
 
-<p>Futures are plain and simple: they hold the <em>promise</em> for the result
-of a computation that is not yet complete. They are a simple container
-&mdash; a placeholder. A computation could fail of course, and this must
-also be encoded: a Future can be in exactly one of 3 states: <em>pending</em>,
-<em>failed</em> or <em>completed</em>.</p>
+<p>Futureは、単純明白だ。Futureは、まだ完了していない計算の結果に対する<em>約束(promise)</em>を保持する、単純なコンテナ（プレースホルダ）だ。当然、計算は失敗することがあるので、このこともコード化する必要がある。Futureは三つの状態、すなわち<em>保留(pending)</em>、<em>失敗(failed)</em>、<em>完了(completed)</em>のうち、きっかり一つの状態を取ることができる。</p>
 
 <div class="explainer">
-<h3>Aside: <em>Composition</em></h3>
-<p>Let's revisit what we mean by composition: combining simpler components
-into more complicated ones. The canonical example of this is function
-composition: Given functions <em>f</em> and
-<em>g</em>, the composite function <em>(g&#8728;f)(x) = g(f(x))</em> &mdash; the result
-of applying <em>x</em> to <em>f</em> first, and then the result of that
-to <em>g</em> &mdash; can be written in Scala:</p>
+<h3>余談: <em>合成(composition)</em></h3>
+<p>もう一度確認すると、合成とは、単純なコンポーネントを結合してより複雑なコンポーネントにすることだ。合成の標準的な例は、関数合成だ。関数<em>f</em>と<em>g</em>が与えられたとき、合成関数<em>(g&#8728;f)(x) = g(f(x))</em>は、まず<em>x</em>を<em>f</em>に適用し、その結果を<em>g</em>に適用した結果だ。この合成関数をScalaで書くと:</p>
 
 <pre><code>val f = (i: Int) => i.toString
 val g = (s: String) => s+s+s
@@ -1317,41 +1257,37 @@ val h = g compose f  // : Int => String
 scala> h(123)
 res0: java.lang.String = 123123123</code></pre>
 
-<p class="LP">the function <em>h</em> being the composite. It is a <em>new</em> function that combines both <em>f</em> and <em>g</em> in a predefined way.</p>
+<p class="LP">この関数<em>h</em>は合成関数で、<em>f</em>と<em>g</em>の双方を所定の方法で結合した<em>新しい</em>関数だ。</p>
 </div>
 
-<p>Futures are a type of collection &mdash; they are a container of
-either 0 or 1 elements &mdash; and you&rsquo;ll find they have standard
-collection methods (eg. <code>map</code>, <code>filter</code>, and <code>foreach</code>). Since a Future&rsquo;s
-value is deferred, the result of applying any of these methods
-is necessarily also deferred; in</p>
+<p>Futureは、ゼロ個あるいは一個の要素を持つコンテナであり、コレクションの一種だ。Futureは、<code>map</code>や<code>filter</code>や<code>foreach</code>といった、標準コレクションのメソッドを持つ。Futureの値は遅延されるので、必然的にこれらのコレクションメソッドを適用した結果もまた遅延される。</p>
 
 <pre><code>val result: Future[Int]
 val resultStr: Future[String] = result map { i =&gt; i.toString }
 </code></pre>
 
-<p class="LP">the function <code>{ i => i.toString }</code> is not invoked until the integer value becomes available, and the transformed collection <code>resultStr</code> is also in pending state until that time.</p>
+<p class="LP">関数<code>{ i => i.toString }</code>は、Int値が利用可能になるまで呼び出されない。また、変換されたコレクションである<code>resultStr</code>も、その時まで保留状態(pending state)になる。</p>
 
-<p>Lists can be flattened;</p>
+<p>リストは平坦化(flatten)できる;</p>
 
 <pre><code>val listOfList: List[List[Int]] = ..
 val list: List[Int] = listOfList.flatten
 </code></pre>
 
-<p class="LP">and this makes sense for futures, too:</p>
+<p class="LP">また、平坦化はFutureにおいても意味をなす:</p>
 
 <pre><code>val futureOfFuture: Future[Future[Int]] = ..
 val future: Future[Int] = futureOfFuture.flatten
 </code></pre>
 
-<p class="LP">since futures are deferred, the implementation of <code>flatten</code> &mdash; it returns immediately &mdash; has to return a future that is the result of waiting for the completion of the outer future (<code><b>Future[</b>Future[Int]<b>]</b></code>) and after that the inner one (<code>Future[<b>Future[Int]</b>]</code>). If the outer future fails, the flattened future must also fail.</p>
+<p class="LP">Futureの<code>flatten</code>の実装は、直ちにFutureを返す。Futureは遅延するので、<code>flatten</code>が返すFutureは、外側のFuture(<code><b>Future[</b>Future[Int]<b>]</b></code>)の完了と、その後に内側のFuture(<code>Future[<b>Future[Int]</b>]</code>)の完了を待つ結果だ。また、外側のFutureが失敗したら、平坦化されたFutureも失敗する必要がある。</p>
 
-<p>Futures (like Lists) also define <code>flatMap</code>; <code>Future[A]</code> defines its signature as</p>
+<p>Futureは、Listと同様に<code>flatMap</code>を定義している。<code>Future[A]</code>は、そのシグネチャを以下のように定義する。</p>
 
 <pre><code>flatMap[B](f: A =&gt; Future[B]): Future[B]
 </code></pre>
 
-<p class="LP">which is like the combination of both <code>map</code> and <code>flatten</code>, and we could implement it that way:</p>
+<p class="LP">`flatMap`は、<code>map</code>と<code>flatten</code>の組み合わせのようなものだ。だから、以下のように実装できる:</p>
 
 <pre><code>def flatMap[B](f: A =&gt; Future[B]): Future[B] = {
   val mapped: Future[Future[B]] = this map f
@@ -1360,11 +1296,7 @@ val future: Future[Int] = futureOfFuture.flatten
 }
 </code></pre>
 
-<p>This is a powerful combination! With <code>flatMap</code> we can define a Future that
-is the result of two futures sequenced, the second future computed based
-on the result of the first one. Imagine we needed to do two RPCs in order
-to authenticate a user (id), we could define the composite operation in the
-following way:</p>
+<p>これは、強力な組み合わせだ！ <code>flatMap</code>によって、順番に並べられた二つのFutureの結果である新しいFutureを定義できる。二番目のFutureは、最初のFutureの結果に基づいて計算する。ユーザ(ID)を認証するために、二つのRPCを実行する必要がある場合を想像してほしい。この場合、結合操作を以下の方法で定義できる:</p>
 
 <pre><code>def getUser(id: Int): Future[User]
 def authenticate(user: User): Future[Boolean]
@@ -1373,7 +1305,7 @@ def isIdAuthed(id: Int): Future[Boolean] =
   getUser(id) flatMap { user =&gt; authenticate(user) }
 </code></pre>
 
-<p class="LP">an additional benefit to this type of composition is that error handling is built-in: the future returned from <code>isAuthed(..)</code> will fail if either of <code>getUser(..)</code> or <code>authenticate(..)</code> does with no extra error handling code.</p>
+<p class="LP">この種の結合のもう一つの恩恵は、エラー処理が組み込まれていることだ。<code>getUser(..)</code>か<code>authenticate(..)</code>が追加でエラー処理をしない限り、<code>isAuthed(..)</code>が返すFutureは失敗するだろう。</p>
 
 <h4>Style</h4>
 
