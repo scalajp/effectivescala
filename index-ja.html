@@ -131,7 +131,7 @@
 <li><strong><a href="#ガベージコレクション">ガベージコレクション</a></strong></li>
 <li><strong><a href="#Java 互換性">Java 互換性</a></strong></li>
 <li><strong><a href="#Twitterの標準ライブラリ">Twitterの標準ライブラリ</a></strong>: <em><a href="#Twitterの標準ライブラリ-Futures">Futures</a></em></li>
-<li><strong><a href="#Acknowledgments">Acknowledgments</a></strong></li>
+<li><strong><a href="#謝辞">謝辞</a></strong></li>
 </ul>
 
 <h2>他の言語</h2>
@@ -757,7 +757,7 @@ elaborate..
 
 <h3><code>for</code>ループと内包</h3>
 
-<p><code>for</code>を使うと、ループと集約を簡潔かつ自然に表現できる。<code>for</code>は、多数のシーケンスを平坦化(flatten)する場合に特に有用だ。<code>for</code>の構文は、内部的にはクロージャを割り当てて呼び出していることを覆い隠している。このため、予期しないコストが発生したり、予想外の挙動を示したりする。例えば、</p>
+<p><code>for</code>を使うと、ループと集約を簡潔かつ自然に表現できる。<code>for</code>は、多数のシーケンスを平坦化(flatten)する場合に特に有用だ。<code>for</code>の構文は、内部的にはクロージャを割り当ててディスパッチしていることを覆い隠している。このため、予期しないコストが発生したり、予想外の挙動を示したりする。例えば、</p>
 
 <pre><code>for (item &lt;- container) {
   if (item != 2) return
@@ -1346,7 +1346,7 @@ def getHierarchy(id: Int, nodes: List[Node] = Nil): Future[Node] =
 
 <p><code>Future</code>は、数多くの有用なメソッドを定義している。<code>Future.value()</code>や<code>Future.exception()</code>を使うと、事前に結果が満たされたFutureを作れる。<code>Future.collect()</code>や<code>Future.join()</code>、<code>Future.select()</code>は、複数のFutureを一つにまとめる結合子を提供する（ie. scatter-gather操作のgather部分）。</p>
 
-<p>（訳注: スペースリーク(space leak)とは、意図せずに巨大な空間計算量のコードを書いてしまうこと。関数型プログラミングでは、遅延評価式を未評価のまま蓄積するようなコードを書くと起きやすい。）</p>
+<p>（訳注: スペースリーク(space leak)とは、意図せずに空間計算量が非常に大きいコードを書いてしまうこと。関数型プログラミングでは、遅延評価式を未評価のまま蓄積するようなコードを書くと起きやすい。）</p>
 
 <h4>キャンセル</h4>
 
@@ -1354,13 +1354,9 @@ def getHierarchy(id: Int, nodes: List[Node] = Nil): Future[Node] =
 
 <p>つまり、キャンセルの動作は生産者に依存し、デフォルトの実装は存在しない。<em>キャンセルはヒントに過ぎない。</em></p>
 
-<h4>Locals</h4>
+<h4>Local</h4>
 
-<p>Util&rsquo;s
-<a href="https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala#L40"><code>Local</code></a>
-provides a reference cell that is local to a particular future dispatch tree. Setting the value of a local makes this
-value available to any computation deferred by a Future in the same thread. They are analagous to thread locals,
-except their scope is not a Java thread but a tree of &ldquo;future threads&rdquo;. In</p>
+<p>Utilライブラリの<a href="https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala#L40"><code>Local</code></a>は、ローカルから特定のFutureのディスパッチツリーへの参照セルを提供する。<code>Local</code>の値をセットすると、同じスレッド内のFutureによって遅延されるあらゆる計算が、この値を利用できるようになる。これらはスレッドローカルに似ているけど、そのスコープはJavaのスレッドでなく、&ldquo;Futureスレッド&rdquo;のツリーだ。</p>
 
 <pre><code>trait User {
   def name: String
@@ -1376,33 +1372,24 @@ rpc() ensure {
 }
 </code></pre>
 
-<p class="LP"><code>user()</code> in the <code>ensure</code> block will refer to the value of the <code>user</code> local at the time the callback was added.</p>
+<p class="LP">ここで、<code>ensure</code>ブロックの中の<code>user()</code>は、コールバックが追加された時点での<code>user</code>(Local)の値を参照する。</p>
 
-<p>As with thread locals, <code>Local</code>s can be very convenient, but should
-almost always be avoided: make sure the problem cannot be sufficiently
-solved by passing data around explicitly, even if it is somewhat
-burdensome.</p>
+<p>スレッドローカルと同様に<code>Local</code>は非常に便利なこともあるが、ほとんどの場合は避けるべきだ。データを明示的に渡して回るのは、たとえそうした方が負担が少なくても、問題を十分に解決できないことを確認しよう。</p>
 
-<p>Locals are used effectively by core libraries for <em>very</em> common
-concerns &mdash; threading through RPC traces, propagating monitors,
-creating &ldquo;stack traces&rdquo; for future callbacks &mdash; where any other solution
-would unduly burden the user. Locals are inappropriate in almost any
-other situation.</p>
+<p>Localは、RPCのトレースを介したスレッド管理や、モニターの伝播、Futureコールバックのための&ldquo;スタックトレース&rdquo;の作成など、<em>とても</em>一般的な関心事(concern)を実現する際に、その他の解決策ではユーザに過度な負担がある場合、コアとなるライブラリにおいて効果的に使われる。Localは、その他のほとんどの場面では不適切だ。</p>
 
 <!--
   ### Offer/Broker
 
 -->
 
-<p><a id="Acknowledgments" /></p>
+<p><a id="謝辞" /></p>
 
-<h2>Acknowledgments</h2>
+<h2>謝辞</h2>
 
-<p>The lessons herein are those of Twitter&rsquo;s Scala community &mdash; I hope
-I&rsquo;ve been a faithful chronicler.</p>
+<p>本レッスンは、Twitter社のScalaコミュニティによるものだ。私は、誠実な記録者でありたい。</p>
 
-<p>Blake Matheny, Nick Kallen, and Steve Gury provided much helpful
-guidance and many excellent suggestions.</p>
+<p>Blake MathenyとNick Kallen、そしてSteve Guryには、とても有益な助言と多くの優れた提案を与えてもらった。</p>
 
 <hr/>
 <ol id="notes">
