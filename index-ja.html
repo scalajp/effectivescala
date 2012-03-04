@@ -12,7 +12,9 @@
 <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 -->
 
+<!--
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+-->
 
 <style>	
 	body {
@@ -126,7 +128,7 @@
 <li><strong><a href="#コレクション">コレクション</a></strong>: <em><a href="#コレクション-階層">階層</a></em>, <em><a href="#コレクション-利用">利用</a></em>, <em><a href="#コレクション-スタイル">スタイル</a></em>, <em><a href="#コレクション-性能">性能</a></em>, <em><a href="#コレクション-Javaコレクション">Javaコレクション</a></em></li>
 <li><strong><a href="#並行性">並行性</a></strong>: <em><a href="#並行性-Future">Future</a></em>, <em><a href="#並行性-コレクション">コレクション</a></em></li>
 <li><strong><a href="#制御構造">制御構造</a></strong>: <em><a href="#制御構造-再帰">再帰</a></em>, <em><a href="#制御構造-Return">Return</a></em>, <em><a href="#制御構造-`for`ループと内包"><code>for</code>ループと内包</a></em>, <em><a href="#制御構造-`require`と`assert`"><code>require</code>と<code>assert</code></a></em></li>
-<li><strong><a href="#関数型プログラミング">関数型プログラミング</a></strong>: <em><a href="#関数型プログラミング-代数的データ型としてのケースクラス">代数的データ型としてのケースクラス</a></em>, <em><a href="#関数型プログラミング-オプション">オプション</a></em>, <em><a href="#関数型プログラミング-パターンマッチ">パターンマッチ</a></em>, <em><a href="#関数型プログラミング-部分関数">部分関数</a></em>, <em><a href="#関数型プログラミング-分配束縛(Destructuring bindings)">分配束縛(Destructuring bindings)</a></em>, <em><a href="#関数型プログラミング-遅延">遅延</a></em>, <em><a href="#関数型プログラミング-名前呼び出し">名前呼び出し</a></em>, <em><a href="#関数型プログラミング-`flatMap`"><code>flatMap</code></a></em></li>
+<li><strong><a href="#関数型プログラミング">関数型プログラミング</a></strong>: <em><a href="#関数型プログラミング-代数的データ型としてのケースクラス">代数的データ型としてのケースクラス</a></em>, <em><a href="#関数型プログラミング-オプション">オプション</a></em>, <em><a href="#関数型プログラミング-パターンマッチ">パターンマッチ</a></em>, <em><a href="#関数型プログラミング-部分関数">部分関数</a></em>, <em><a href="#関数型プログラミング-Destructuring bindings">Destructuring bindings</a></em>, <em><a href="#関数型プログラミング-遅延評価">遅延評価</a></em>, <em><a href="#関数型プログラミング-名前呼び出し">名前呼び出し</a></em>, <em><a href="#関数型プログラミング-`flatMap`"><code>flatMap</code></a></em></li>
 <li><strong><a href="#オブジェクト指向プログラミング">オブジェクト指向プログラミング</a></strong>: <em><a href="#オブジェクト指向プログラミング-依存性注入">依存性注入</a></em>, <em><a href="#オブジェクト指向プログラミング-トレイト">トレイト</a></em>, <em><a href="#オブジェクト指向プログラミング-可視性">可視性</a></em>, <em><a href="#オブジェクト指向プログラミング-構造的型(？正確な訳？)">構造的型(？正確な訳？)</a></em></li>
 <li><strong><a href="#ガベージコレクション">ガベージコレクション</a></strong></li>
 <li><strong><a href="#Java 互換性">Java 互換性</a></strong></li>
@@ -880,17 +882,17 @@ username = &quot;foobar&quot;
 
 <h3>パターンマッチ</h3>
 
-<p>パターンマッチ(<code>x match { ...</code>)は、書かれた Scala コードの見通しを良くする。パターンマッチは条件実行および非構造化(destructuring)、ひとつの構成物へのキャストを合成する。うまく使われたなら、明快さと安全さの両方をより高めてくれる。</p>
+<p>パターンマッチ (<code>x match { ...</code>) は、Scalaで書かれたコード内に広く使われている。パターンマッチは条件の実行および分解(destructuring)、ひとつの構成物へのキャストを合成する。うまく使うことで明快さと安全さの両方をより高めてくれる。</p>
 
-<p>型のスイッチを実装するためにパターンマッチを使う。</p>
+<p>型ごとの処理を実装するためにパターンマッチを使う。</p>
 
 <pre><code>obj match {
   case str: String =&gt; ...
   case addr: SocketAddress =&gt; ...
 </code></pre>
 
-<p>パターンマッチは、非構造化(destrcturing)とあわせて利用された時に最もよく動作する(たとえば、もしケースクラスをマッチングするなら)
-次の例の代わりに</p>
+<p>パターンマッチは、分解とあわせて利用された時(たとえば、ケースクラスをマッチングするとき)に最大限に役立つ
+次の例のように書くべきではなく、</p>
 
 <pre><code>animal match {
   case dog: Dog =&gt; &quot;dog (%s)&quot;.format(dog.breed)
@@ -898,7 +900,7 @@ username = &quot;foobar&quot;
   }
 </code></pre>
 
-<p class="LP">このように書く</p>
+<p class="LP">以下のように書く</p>
 
 <pre><code>animal match {
   case Dog(breed) =&gt; &quot;dog (%s)&quot;.format(breed)
@@ -906,11 +908,10 @@ username = &quot;foobar&quot;
 }
 </code></pre>
 
-<p><a href="http://www.scala-lang.org/node/112">カスタム抽出子</a> を書こう。しかし、二重コンストラクタ(<code>apply</code>) (dual constructor) と利用する場合のみだ。
-そうでなければ、不適当な利用法になるかもしれない。
-a dual constructor (<code>apply</code>), otherwise their use may be out of place.</p>
+<p>ただ、2つのコンストラクタ(<code>apply</code>) を利用する場合のみ、<a href="http://www.scala-lang.org/node/112">カスタム抽出子</a> を書く。
+さもなければ不自然になる可能性がある。</p>
 
-<p>デフォルト値が、もっと意味が取れるものであるとき条件実行にパターンマッチングを使わないようにする。
+<p>デフォルト値がもっと意味を持つものであるとき、条件実行にパターンマッチングを使わないようにする。
 コレクションライブラリは通常<code>Option</code>を返すメソッドを提供する。次の例は避けよ。</p>
 
 <pre><code>val x = list match {
@@ -924,20 +925,20 @@ a dual constructor (<code>apply</code>), otherwise their use may be out of place
 <pre><code>val x = list.headOption getOrElse default
 </code></pre>
 
-<p class="LP">は、より短く、意図を伝達する。</p>
+<p class="LP">の方がより短く、目的が伝わりやすいからだ。</p>
 
 <p><a id="関数型プログラミング-部分関数" /></p>
 
 <h3>部分関数</h3>
 
-<p>Scala は <code>PartialFunction</code> を定義するための構文上の簡略的記法を提供する。</p>
+<p>Scala は 部分関数(<code>PartialFunction</code>) を定義するための構文上の簡略的記法を提供する。</p>
 
 <pre><code>val pf: PartialFunction[Int, String] = {
   case i if i%2 == 0 =&gt; &quot;even&quot;
 }
 </code></pre>
 
-<p class="LP">また、<code>orElse</code> と組み合わせられるかもしれない。</p>
+<p class="LP">また、これらは <code>orElse</code> と組み合わせられる。</p>
 
 <pre><code>val tf: (Int =&gt; String) = pf orElse { case _ =&gt; &quot;odd&quot;}
 
@@ -945,7 +946,8 @@ tf(1) == &quot;odd&quot;
 tf(2) == &quot;even&quot;
 </code></pre>
 
-<p>部分関数は多くの場面で起こり得るし，たとえば、メソッドの引数として、<code>PartialFunction</code>で効果的に符号化される。</p>
+<p>部分関数は多くの場面で起こり得るものであり，<code>PartialFunction</code> で効率的に符号化される。
+メソッドの引数として利用する例：</p>
 
 <pre><code>trait Publisher[T] {
   def subscribe(f: PartialFunction[T, Unit])
@@ -959,18 +961,18 @@ publisher.subscribe {
 }
 </code></pre>
 
-<p class="LP">もしくは <code>Option</code> を返すような呼び出しの場面において、</p>
+<p class="LP">また状況によっては <code>Option</code> を返すような呼び出しがあるかもしれないが、</p>
 
 <pre><code>// Attempt to classify the the throwable for logging.
 type Classifier = Throwable =&gt; Option[java.util.logging.Level]
 </code></pre>
 
-<p class="LP">は、<code>PartialFunction</code>で表現される方がよりよいかもしれない。</p>
+<p class="LP">これも、<code>PartialFunction</code>を使って表現する方がよいだろう。</p>
 
 <pre><code>type Classifier = PartialFunction[Throwable, java.util.Logging.Level]
 </code></pre>
 
-<p class="LP">より優れた構成可能性(composability)を与えるからだ。</p>
+<p class="LP">それはより優れた構成可能性(composability)につながるからだ。</p>
 
 <pre><code>val classifier1: Classifier
 val classifier2: Classifier
@@ -978,13 +980,13 @@ val classifier2: Classifier
 val classifier = classifier1 orElse classifier2 orElse { _ =&gt; java.util.Logging.Level.FINEST }
 </code></pre>
 
-<p><a id="関数型プログラミング-分配束縛(Destructuring bindings)" /></p>
+<p><a id="関数型プログラミング-Destructuring bindings" /></p>
 
-<h3>分配束縛(Destructuring bindings)</h3>
+<h3>Destructuring bindings</h3>
 
-<p>分配値束縛は、パターンマッチングに関係している。同じメカニズムを利用しているが、
-(例外の可能性を許容しないために)正確にひとつの選択肢があるときだけ適用可能である。
-分配束縛は特にタプルとケースクラスで有用である。</p>
+<p>Destructuring bind(訳注:構造化代入、分配束縛などの訳がある)による値代入は、パターンマッチに関連している。
+それらは同じメカニズムを利用しているが、(例外の可能性を許容しないために)正確にひとつの選択肢があるときだけ適用できる。
+Destructuring bindは特にタプルやケースクラスで有用である。</p>
 
 <pre><code>val tuple = ('a', 1)
 val (char, digit) = tuple
@@ -993,12 +995,12 @@ val tweet = Tweet(&quot;just tweeting&quot;, Time.now)
 val Tweet(text, timestamp) = tweet
 </code></pre>
 
-<p><a id="関数型プログラミング-遅延" /></p>
+<p><a id="関数型プログラミング-遅延評価" /></p>
 
-<h3>遅延</h3>
+<h3>遅延評価</h3>
 
-<p>Scala のフィールドは、<code>val</code> が <code>lazy</code> プレフィックスと共に使われた時は <em>必要に応じて</em> 演算される。
-なぜなら、フィールドとメソッドは Scala では等価だからである(フィールドが <code>private[this]</code> にならないように)。</p>
+<p>Scala のフィールドは、<code>val</code> が <code>lazy</code> プレフィックスと共に使われた時は <em>必要になったときに</em> 計算されるようになる。
+なぜなら、(フィールドを <code>private[this]</code> にしない限りは)フィールドとメソッドは Scala では等価だからである。</p>
 
 <pre><code>lazy val field = computation()
 </code></pre>
@@ -1012,9 +1014,9 @@ def field = if (_theField.isDefined) _theField.get else {
 }
 </code></pre>
 
-<p class="LP">すなわち、結果を演算し記憶する。この目的のために遅延フィールドを使うようにし、しかし、遅延がセマンティクスによって要求されるときに遅延を使うことを避ける。</p>
+<p class="LP">すなわち、結果を演算し記憶する。この目的のために遅延フィールドを使うようにし、しかし、遅延さが意味を持って(by semantics)要求されるときには遅延評価を使うことを避ける。</p>
 
-<p>このようなケースにおいて、コストモデルを明確にし、副作用がより正確に制御されるから、明示的であることがよりよい。</p>
+<p>このような場合には、コストモデルを明確にし、副作用をより正確に制御するために明示的であることがよりよい。</p>
 
 <p>遅延フィールドはスレッドセーフである。</p>
 
@@ -1025,26 +1027,28 @@ def field = if (_theField.isDefined) _theField.get else {
 <p>メソッドのパラメーターは名前によって特定されるかもしれない、その意味するところは
 パラメータは値に紐付くのではなくて、繰り返されうる <em>演算</em> に対して紐付くということである。
 この機能は気をつけて適用されなければならない。値渡しの文脈を期待している呼び出し側は驚くであろう。
-この機能の動機は構文的に自然な DSL を構築することにある。&mdash; 新しい制御構造は特に、かなりネイティブな言語機能に見えるように作ることができる</p>
+この機能の動機は構文的に自然な DSL を構築することにある。&mdash; 新しい制御構造は特に、かなりネイティブな言語機能に見えるように作ることができる
++メソッドの引数は名前渡しで特定される、引数の中身は必ずしも値である必要はなく <em>計算式</em> (繰り返し使われる可能性がある)であれば良い。この機能は注意して適用しなければならない; 呼び出し元が値渡しを意図している場合は意図しない結果になる可能性があるからだ。この機能は構文的に自然なドメイン特定言語(DSL)を構成するためにある。新しい特別な制御機構を自然言語のように見せる事ができる。</p>
 
 <p>名前呼び出しは、そのような制御構造のためだけに使うことだ。そこでは、渡されてくるものは、
 思いも寄らない演算結果より&ldquo;ブロック&rdquo;であるということが、呼び出し側に明らかである。
 名前呼び出しは、最後の引数リストの最後の位置にある引数にだけ使うことだ。
-名前呼び出しを使うときは、呼び出し側にその引数が名前呼び出しであることが明確に伝わるようにメソッドには名称をつけることを確実におこなう。</p>
+名前呼び出しを使うときは、呼び出し側にその引数が名前呼び出しであることが明確に伝わるようにメソッドには名称をつけることを確実におこなう。
++通りすぎてしまうのは予期しない計算式の結果よりもむしろ&ldquo;ブロック&rdquo;である、その事は呼び出し元に明らかにし、そのような制御機構のためだけに名前呼び出しを使おう。最後の引数リストの最後にある引数だけを名前呼出し用に使いなさい。名前呼出しを使っている時、引数が名前呼出しになっている事を呼び出し元に明らかになるようにメソッドが命名されていることを保証しなさい。</p>
 
 <p>値を複数回演算させたいとき、また特にその演算が副作用を持つとき、陽関数(explicit functions)を使う。</p>
 
 <pre><code>class SSLConnector(mkEngine: () =&gt; SSLEngine)
 </code></pre>
 
-<p class="LP">その意図は明確なままであり、呼び出し側が驚かずに済む。</p>
+<p class="LP">目的は明らかに残しつつ、呼び出し元が驚くことなくなる。</p>
 
 <p><a id="関数型プログラミング-`flatMap`" /></p>
 
 <h3><code>flatMap</code></h3>
 
 <p><code>map</code> と <code>flatten</code> の合成である <code>flatMap</code> は、鋭敏な力と素晴らしい実用性を持ち、特別な注目を浴びるに値する。
-その同類である <code>map</code> のように、<code>Future</code> や <code>Option</code> といった非伝統的なコレクションにおいて、しばしば利用可能である。
+その同類である <code>map</code> のように、<code>Future</code> や <code>Option</code> といった非伝統的なコレクションにおいて、頻繁に利用できる。
 その振る舞いは、<code>Container[A]</code>といったシグネチャによって明らかになる。</p>
 
 <pre><code>flatMap[B](f: A =&gt; Container[B]): Container[B]
@@ -1072,7 +1076,7 @@ val perms = chars flatMap { a =&gt;
 } yield &quot;%c%c&quot;.format(a, b)
 </code></pre>
 
-<p><code>flatMap</code> は、しばしば <code>Options</code> を扱うときに有用である。 &mdash; オプションの連鎖(chain of options)を流れ落ちてひとつになる。</p>
+<p><code>flatMap</code> は、(Optionの連鎖(chain of options)を畳み込んでひとつにするときなど) <code>Option</code> を扱うときに頻繁に役に立つ。</p>
 
 <pre><code>val host: Option[String] = ..
 val port: Option[Int] = ..
@@ -1085,7 +1089,7 @@ val addr: Option[InetSocketAddress] =
   }
 </code></pre>
 
-<p class="LP">これも、<code>for</code> により、より簡潔に記述できる。</p>
+<p class="LP">これも、<code>for</code> を使えばもっと簡潔に記述できる。</p>
 
 <pre><code>val addr: Option[InetSocketAddress] = for {
   h &lt;- host
@@ -1093,7 +1097,7 @@ val addr: Option[InetSocketAddress] =
 } yield new InetSocketAddress(h, p)
 </code></pre>
 
-<p><code>Future</code> における <code>flatMap</code> の利用については、<a href="#Twitter's%20standard%20libraries-Futures">futures section</a> で言及している。</p>
+<p><code>Future</code> における <code>flatMap</code> の利用については、<a href="#Twitter's%20standard%20libraries-Futures">futures section</a> で議論されている。</p>
 
 <p><a id="オブジェクト指向プログラミング" /></p>
 
