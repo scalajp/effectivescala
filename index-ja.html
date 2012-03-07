@@ -129,7 +129,7 @@
 <li><strong><a href="#並行性">並行性</a></strong>: <em><a href="#並行性-Future">Future</a></em>, <em><a href="#並行性-コレクション">コレクション</a></em></li>
 <li><strong><a href="#制御構造">制御構造</a></strong>: <em><a href="#制御構造-再帰">再帰</a></em>, <em><a href="#制御構造-Return">Return</a></em>, <em><a href="#制御構造-`for`ループと内包"><code>for</code>ループと内包</a></em>, <em><a href="#制御構造-`require`と`assert`"><code>require</code>と<code>assert</code></a></em></li>
 <li><strong><a href="#関数型プログラミング">関数型プログラミング</a></strong>: <em><a href="#関数型プログラミング-代数的データ型としてのケースクラス">代数的データ型としてのケースクラス</a></em>, <em><a href="#関数型プログラミング-オプション">オプション</a></em>, <em><a href="#関数型プログラミング-パターンマッチ">パターンマッチ</a></em>, <em><a href="#関数型プログラミング-部分関数">部分関数</a></em>, <em><a href="#関数型プログラミング-Destructuring bindings">Destructuring bindings</a></em>, <em><a href="#関数型プログラミング-遅延評価">遅延評価</a></em>, <em><a href="#関数型プログラミング-名前呼び出し">名前呼び出し</a></em>, <em><a href="#関数型プログラミング-`flatMap`"><code>flatMap</code></a></em></li>
-<li><strong><a href="#オブジェクト指向プログラミング">オブジェクト指向プログラミング</a></strong>: <em><a href="#オブジェクト指向プログラミング-依存性注入">依存性注入</a></em>, <em><a href="#オブジェクト指向プログラミング-トレイト">トレイト</a></em>, <em><a href="#オブジェクト指向プログラミング-可視性">可視性</a></em>, <em><a href="#オブジェクト指向プログラミング-構造的な型付け">構造的な型付け</a></em></li>
+<li><strong><a href="#オブジェクト指向プログラミング">オブジェクト指向プログラミング</a></strong>: <em><a href="#オブジェクト指向プログラミング-依存性注入">依存性注入</a></em>, <em><a href="#オブジェクト指向プログラミング-トレイト">トレイト</a></em>, <em><a href="#オブジェクト指向プログラミング-可視性">可視性</a></em>, <em><a href="#オブジェクト指向プログラミング-構造的部分型">構造的部分型</a></em></li>
 <li><strong><a href="#ガベージコレクション">ガベージコレクション</a></strong></li>
 <li><strong><a href="#Java 互換性">Java 互換性</a></strong></li>
 <li><strong><a href="#Twitterの標準ライブラリ">Twitterの標準ライブラリ</a></strong>: <em><a href="#Twitterの標準ライブラリ-Futures">Futures</a></em></li>
@@ -486,7 +486,7 @@ val set = Set(1, 2, 3)
 val map = Map(1 -&gt; &quot;one&quot;, 2 -&gt; &quot;two&quot;, 3 -&gt; &quot;three&quot;)
 </code></pre>
 
-<p class="LP">このスタイルでは、コレクションの動作がその実装と切り離されているので、コレクションライブラリは最も適切な実装型を使うことができる。君が必要としているのは<code>Map</code>であって、必ずしも赤黒木じゃない。さらに、これらのデフォルトコンストラクタは、しばしば特殊化した表現を用いる。例えば<code>Map()</code>は、3つのキーを持つマップに対して、3つのフィールドを持つオブジェクトを使う（訳注: [Map3](http://www.scala-lang.org/api/current/scala/collection/immutable/Map$$Map3.html)クラスのこと）。</p>
+<p class="LP">このスタイルでは、コレクションの動作がその実装と切り離されているので、コレクションライブラリは最も適切な実装型を使うことができる。君が必要としているのは<code>Map</code>であって、必ずしも赤黒木じゃない。さらに、これらのデフォルトコンストラクタは、しばしば特殊化した表現を用いる。例えば<code>Map()</code>は、3つのキーを持つマップに対して、3つのフィールドを持つオブジェクト（<a href="http://www.scala-lang.org/api/current/scala/collection/immutable/Map$$Map3.html"><code>Map3</code></a>クラス）を使う。</p>
 
 <p>以上からの結論として、メソッドやコンストラクタでは、<em>最も総称的なコレクション型を適切に受け取ろう</em>。これは詰まるところ、通常は上記の<code>Iterable</code>、<code>Seq</code>、<code>Set</code>あるいは<code>Map</code>のうち、どれか一つである。もしメソッドがシーケンスを必要とする場合は、<code>List[T]</code>ではなく<code>Seq[T]</code>を使おう。</p>
 
@@ -766,9 +766,20 @@ elaborate..
 }
 </code></pre>
 
-<p class="LP">このコードでは、<code>return</code>を非局所的(nonlocal)にするよう`container`が計算を遅延させると、ランタイムエラーが発生することがある！（訳注: どういう意味？）</p>
+<p class="LP">このコードは、`container`が計算を遅延させた場合にランタイムエラーが発生し、その結果として<code>return</code>が非局所的(nonlocal)に評価されてしまうことがある！</p>
 
 <p>これらの理由から、コードを明瞭にするためである場合を除いて、<code>for</code>を使う代わりに、<code>foreach</code>や<code>flatMap</code>や<code>map</code>や<code>filter</code>を直接呼び出す方が良いことが多い。</p>
+
+<p>（訳注1: Scalaのfor式は<code>foreach</code>、<code>flatMap</code>、<code>map</code>、<code>withFilter</code>を呼び出す糖衣構文で、ループ内の式は、コンパイル時にそれらのメソッドに渡される匿名関数に変換される。例えば、上記の例のfor式は、実際には</p>
+
+<pre><code>container foreach { item =&gt;
+  if (item != 2) return
+}
+</code></pre>
+
+<p>というコードとして実行される。原文では、最初からこのように記述することを推奨している。）</p>
+
+<p>（訳注2: ネストした匿名関数での<code>return</code>式は、ランタイムエラーである<code>NonLocalReturnException</code>の<code>throw</code>と<code>catch</code>に変換される。この場合、<code>container</code>が遅延評価されると<code>return</code>式の挙動が意図しないものになる場合がある。詳細に興味がある場合は、<a href="https://github.com/okapies/effectivescala/commit/8b448ef819e6d87d21fa78310b84fc72593b0226#commitcomment-996948">こちらの議論</a>も参照してほしい。）</p>
 
 <p><a id="制御構造-`require`と`assert`" /></p>
 
@@ -1197,15 +1208,17 @@ val addr: Option[InetSocketAddress] =
 
 <p class="LP"><code>foo()</code> の呼び出し側は、戻り値のインスタンスの限定されたビュー(<code>Foo with Bar</code>) を参照する。</p>
 
-<p><a id="オブジェクト指向プログラミング-構造的な型付け" /></p>
+<p><a id="オブジェクト指向プログラミング-構造的部分型" /></p>
 
-<h3>構造的な型付け</h3>
+<h3>構造的部分型</h3>
 
-<p>構造的な型(structual type)(訳注:構造的部分型(structural subtyping) 相当。<a href="https://github.com/okapies/effectivescala/pull/1">issue #1</a>に議論・解説あり)は通常は使わない。構造的な型は、便利で強力な機能であるが、残念なことに JVM 上では効率的な実装手段はない。しかし、ある運命のいたずらともいうべき実装によって、リフレクションをするためのとても良い速記法を提供する。</p>
+<p>構造的部分型(structural type)は通常は使わない。構造的部分型は、便利で強力な機能であるが、残念なことに JVM 上では効率的な実装手段はない。しかし、ある運命のいたずらともいうべき実装によって、リフレクションをするためのとても良い速記法を提供する。</p>
 
 <pre><code> val obj: AnyRef
  obj.asInstanceOf[{def close()}].close()
 </code></pre>
+
+<p>（訳注: &ldquo;structural typing&rdquo;を直訳すると「構造的な型付け」だが、Scalaの文脈では「構造的部分型(structural subtyping)」と同じ意味だと考えて良い。この用語の背景については、<a href="https://github.com/okapies/effectivescala/pull/1#r455268">@kmizu氏による解説</a>を参照して欲しい。）</p>
 
 <p><a id="ガベージコレクション" /></p>
 
