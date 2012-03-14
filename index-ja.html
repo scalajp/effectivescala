@@ -779,7 +779,7 @@ elaborate..
 
 <p>というコードとして実行される。原文では、最初からこのように記述することを推奨している。）</p>
 
-<p>（訳注2: ネストした匿名関数での<code>return</code>式は、ランタイムエラーである<code>NonLocalReturnException</code>の<code>throw</code>と<code>catch</code>に変換される。この場合、<code>container</code>が遅延評価されると<code>return</code>式の挙動が意図しないものになる場合がある。詳細に興味がある場合は、<a href="https://github.com/okapies/effectivescala/commit/8b448ef819e6d87d21fa78310b84fc72593b0226#commitcomment-996948">こちらの議論</a>も参照してほしい。）</p>
+<p>（訳注2: ネストした匿名関数での<code>return</code>式は、ランタイムエラーである<code>NonLocalReturnException</code>の<code>throw</code>と<code>catch</code>に変換される。この場合、<code>container</code>が遅延評価されると<code>return</code>式の挙動が意図しないものになる場合がある。詳細に興味がある場合は、<a href="https://github.com/scalajp/effectivescala/commit/8b448ef819e6d87d21fa78310b84fc72593b0226#commitcomment-996948">こちらの議論</a>も参照してほしい。）</p>
 
 <p><a id="制御構造-`require`と`assert`" /></p>
 
@@ -1006,7 +1006,7 @@ val tweet = Tweet(&quot;just tweeting&quot;, Time.now)
 val Tweet(text, timestamp) = tweet
 </code></pre>
 
-<p>（訳注: Destructuring bindは、「構造化代入」や「分配束縛」等の訳がある。詳細については、<a href="https://github.com/okapies/effectivescala/issues/4">こちらの議論</a>を参照してほしい。）</p>
+<p>（訳注: Destructuring bindは、「構造化代入」や「分配束縛」等の訳がある。詳細については、<a href="https://github.com/scalajp/effectivescala/issues/4">こちらの議論</a>を参照してほしい。）</p>
 
 <p><a id="関数型プログラミング-遅延評価" /></p>
 
@@ -1222,7 +1222,7 @@ val addr: Option[InetSocketAddress] =
  obj.asInstanceOf[{def close()}].close()
 </code></pre>
 
-<p>（訳注: &ldquo;structural typing&rdquo;を直訳すると「構造的な型付け」だが、Scalaの文脈では「構造的部分型(structural subtyping)」と同じ意味だと考えて良い。この用語の背景については、<a href="https://github.com/okapies/effectivescala/pull/1#r455268">@kmizu氏による解説</a>を参照して欲しい。）</p>
+<p>（訳注: &ldquo;structural typing&rdquo;を直訳すると「構造的な型付け」だが、Scalaの文脈では「構造的部分型(structural subtyping)」と同じ意味だと考えて良い。この用語の背景については、<a href="https://github.com/scalajp/effectivescala/pull/1#r455268">@kmizu氏による解説</a>を参照して欲しい。）</p>
 
 <p><a id="ガベージコレクション" /></p>
 
