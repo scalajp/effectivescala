@@ -133,7 +133,7 @@
 <li><strong><a href="#ガベージコレクション">ガベージコレクション</a></strong></li>
 <li><strong><a href="#Java 互換性">Java 互換性</a></strong></li>
 <li><strong><a href="#Twitterの標準ライブラリ">Twitterの標準ライブラリ</a></strong>: <em><a href="#Twitterの標準ライブラリ-Future">Future</a></em></li>
-<li><strong><a href="#謝辞">謝辞</a></strong></li>
+<li><strong><a href="#謝辞">謝辞</a></strong>: <em><a href="#謝辞-日本語版への謝辞">日本語版への謝辞</a></em></li>
 </ul>
 
 <h2>他の言語</h2>
@@ -222,7 +222,7 @@
 <dt>6個より多くの名前をインポートするときはワイルドカードを使う</dt>
 <dd>e.g.: <code>import com.twitter.concurrent._</code>
 <br />ワイルドカードを濫用しないこと。一部のパッケージは、大量の名前をエクスポートする。</dd>
-<dt>コレクションを使う時は、<code>scala.collections.immutable</code> あるいは <code>scala.collections.mutable</code> をインポートして名前を修飾する</dt>
+<dt>コレクションを使う時は、<code>scala.collection.immutable</code> あるいは <code>scala.collection.mutable</code> をインポートして名前を修飾する</dt>
 <dd>可変(mutable)コレクションと不変(immutable)コレクションは同じ名前を二重に使っている。読み手のために、名前を修飾してどちらのコレクションを使っているか明確にしよう。 (e.g. "<code>immutable.Map</code>")</dd>
 <dt>他のパッケージからの相対指定でインポートしない</dt>
 <dd><pre><code>import com.twitter
@@ -451,7 +451,7 @@ package object net {
 
 <h2>コレクション</h2>
 
-<p>Scalaが持つコレクションライブラリは、とても総称的(generic)で、機能豊富で、強力で、組み立てやすい。コレクションは高水準であり、多数の操作を提供している。多数のコレクション操作と変換を簡潔かつ読みやすく表現できるが、それらの機能を不注意に適用すると、しばしば正反対の結果を招く。全てのScalaプログラマは、<a href="http://www.scala-lang.org/docu/files/collections-api/collections.html">collections design document</a>を読むべきだ。このドキュメントは、Scalaのコレクションライブラリに対する優れた洞察と意欲をもたらしてくれる。</p>
+<p>Scalaが持つコレクションライブラリは、とても総称的(generic)で、機能豊富で、強力で、組み立てやすい。コレクションは高水準であり、多数の操作を提供している。多数のコレクション操作と変換を簡潔かつ読みやすく表現できるが、それらの機能を不注意に適用すると、しばしば正反対の結果を招く。全てのScalaプログラマは、<a href="http://scalajp.github.com/scala-collections-doc-ja/">collections design document</a>を読むべきだ。このドキュメントは、Scalaのコレクションライブラリに対する優れた洞察と意欲をもたらしてくれる。</p>
 
 <p>常に、君のニーズを最もシンプルに満たすコレクションを使おう。</p>
 
@@ -1407,6 +1407,18 @@ rpc() ensure {
 <p>本レッスンは、Twitter社のScalaコミュニティによるものだ。私は、誠実な記録者でありたい。</p>
 
 <p>Blake MathenyとNick Kallen、そしてSteve Guryには、とても有益な助言と多くの優れた提案を与えてもらった。</p>
+
+<p><a id="謝辞-日本語版への謝辞" /></p>
+
+<h3>日本語版への謝辞</h3>
+
+<p>本ドキュメントの日本語訳は、<a href="http://github.com/okapies">@okapies</a>と<a href="https://github.com/scova0731">@scova0731</a>が担当しました。</p>
+
+<p>翻訳にあたっては、日本のScalaコミュニティから数多くの貢献を頂きました: <a href="http://github.com/xuwei-k">@xuwei-k</a>さん、<a href="http://github.com/kmizu">@kmizu</a>さん、<a href="http://github.com/eed3si9n">@eed3si9n</a>さん、<a href="http://github.com/akr4">@akr4</a>さん、<a href="http://github.com/yosuke-furukawa">@yosuke-furukawa</a>さん、m hanadaさん、および<a href="http://jp.scala-users.org/">日本Scalaユーザーズグループ</a>の皆さん。（以上、順不同）</p>
+
+<p>また、<a href="http://github.com/kmizu">@kmizu</a>さんと<a href="http://github.com/eed3si9n">@eed3si9n</a>さんには、高度に専門的な議論について貴重な助言を頂きました。</p>
+
+<p>ありがとうございます。</p>
 
 <hr/>
 <ol id="notes">
