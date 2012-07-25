@@ -16,7 +16,7 @@
 
 <style>	
 	body {
-		font-family: times, serif;
+		font-family: "ff-meta-serif-web-pro", times, serif;
 		margin: 0 1.0in 0 1.0in;
 /*		line-height: 1.3em;*/
 	}
@@ -54,7 +54,7 @@
 	}
 	
 	h1 {
-		font-family: sans-serif;
+		font-family: "prenton-condensed";
 	}
 	
 	h2 {
@@ -111,7 +111,7 @@
 </head>
 
 <body>
-<p><a href="http://github.com/twitter/effectivescala"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/edc6dae7a1079163caf7f17c60495bbb6d027c93/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub"></a></p>
+<p><a href="http://github.com/twitter/effectivescala"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a></p>
 
 <h1 class="header">Effective Scala</h1>
 
@@ -130,7 +130,7 @@
 <li><strong><a href="#Object oriented programming">Object oriented programming</a></strong>: <em><a href="#Object oriented programming-Dependency injection">Dependency injection</a></em>, <em><a href="#Object oriented programming-Traits">Traits</a></em>, <em><a href="#Object oriented programming-Visibility">Visibility</a></em>, <em><a href="#Object oriented programming-Structural typing">Structural typing</a></em></li>
 <li><strong><a href="#Garbage collection">Garbage collection</a></strong></li>
 <li><strong><a href="#Java compatibility">Java compatibility</a></strong></li>
-<li><strong><a href="#Twitter's standard libraries">Twitter&rsquo;s standard libraries</a></strong>: <em><a href="#Twitter's standard libraries-Futures">Futures</a></em></li>
+<li><strong><a href="#Twitter's standard libraries">Twitter&rsquo;s standard libraries</a></strong>: <em><a href="#Twitter's standard libraries-Futures">Futures</a></em>, <em><a href="#Twitter's standard libraries-Offer/Broker">Offer/Broker</a></em></li>
 <li><strong><a href="#Acknowledgments">Acknowledgments</a></strong></li>
 </ul>
 
@@ -276,7 +276,7 @@ no more information than <code>User.get</code>.
 <dd>e.g.: <code>import com.twitter.concurrent._</code>
 <br />Don't apply this blindly: some packages export too many names</dd>
 <dt>When using collections, qualify names by importing 
-<code>scala.collections.immutable</code> and/or <code>scala.collections.mutable</code></dt>
+<code>scala.collection.immutable</code> and/or <code>scala.collection.mutable</code></dt>
 <dd>Mutable and immutable collections have dual names. 
 Qualifiying the names makes is obvious to the reader which variant is being used (e.g. "<code>immutable.Map</code>")</dd>
 <dt>Do not use relative imports from other packages</dt>
@@ -490,7 +490,7 @@ IntMaker
 
 <p>Don&rsquo;t use subclassing when an alias will do.</p>
 
-<pre><code>trait SocketFactory extends (SocketAddress) =&gt; Socket
+<pre><code>trait SocketFactory extends (SocketAddress =&gt; Socket)
 </code></pre>
 
 <p class="LP">a <code>SocketFactory</code> <em>is</em> a function that produces a <code>Socket</code>. Using a type alias</p>
@@ -550,7 +550,7 @@ the reader should beware of these implications.</p>
 <p>Scala has a very generic, rich, powerful, and composable collections
 library; collections are high level and expose a large set of
 operations. Many collection manipulations and transformations can be
-expressed succinctly and readbly, but careless application of its
+expressed succinctly and readably, but careless application of its
 features can often lead to the opposite result. Every Scala programmer
 should read the <a href="http://www.scala-lang.org/docu/files/collections-api/collections.html">collections design
 document</a>;
@@ -582,9 +582,9 @@ circumstances, and make programs easier to reason about since they are
 referentially transparent and are thus also threadsafe by default.</p>
 
 <p><em>Use the <code>mutable</code> namespace explicitly.</em> Don&rsquo;t import
-<code>scala.collections.mutable._</code> and refer to <code>Set</code>, instead</p>
+<code>scala.collection.mutable._</code> and refer to <code>Set</code>, instead</p>
 
-<pre><code>import scala.collections.mutable
+<pre><code>import scala.collection.mutable
 val set = mutable.Set()
 </code></pre>
 
@@ -1040,7 +1040,7 @@ emphasizes the transformation of values over stateful mutation,
 yielding code that is referentially transparent, providing stronger
 invariants and thus also easier to reason about. Case classes, pattern
 matching, destructuring bindings, type inference, and lightweight
-closure and method creation syntax are the tools of this trade.</p>
+closure- and method-creation syntax are the tools of this trade.</p>
 
 <p><a id="Functional programming-Case classes as algebraic data types" /></p>
 
@@ -1062,7 +1062,7 @@ case class Leaf[T](value: T) extends Tree[T]
 <p class="LP">the type <code>Tree[T]</code> has two constructors: <code>Node</code> and <code>Leaf</code>. Declaring the type <code>sealed</code> allows the compiler to do exhaustivity analysis since constructors cannot be added outside the source file.</p>
 
 <p>Together with pattern matching, such modelling results in code that is
-both succinct &ldquo;obviously correct&rdquo;:</p>
+both succinct and &ldquo;obviously correct&rdquo;:</p>
 
 <pre><code>def findMin[T &lt;: Ordered[T]](tree: Tree[T]) = tree match {
   case Node(left, right) =&gt; Seq(findMin(left), findMin(right)).min
@@ -1372,7 +1372,7 @@ val addr: Option[InetSocketAddress] =
 
 <h2>Object oriented programming</h2>
 
-<p>Much of Scala&rsquo;s vastness lie in its object system. Scala is a <em>pure</em>
+<p>Much of Scala&rsquo;s vastness lies in its object system. Scala is a <em>pure</em>
 language in the sense that <em>all values</em> are objects; there is no
 distinction between primitive types and composite ones.
 Scala also features mixins allowing for more orthogonal and piecemeal
@@ -1381,7 +1381,7 @@ time with all the benefits of static type checking.</p>
 
 <p>A motivation behind the mixin system was to obviate the need for
 traditional dependency injection. The culmination of this &ldquo;component
-style&rdquo; of programming is <a href="http://jboner.github.com/2008/10/06/real-world-scala-dependency-injection-di.html">the cake
+style&rdquo; of programming is <a href="http://jonasboner.com/2008/10/06/real-world-scala-dependency-injection-di/">the cake
 pattern</a>.</p>
 
 <p><a id="Object oriented programming-Dependency injection" /></p>
@@ -1397,7 +1397,7 @@ It&rsquo;s boring and simple and it works. <em>Use dependency injection for
 program modularization</em>, and in particular, <em>prefer composition over
 inheritance</em> &mdash; for this leads to more modular and testable programs.
 When encountering a situation requiring inheritance, ask yourself: how
-you structure the program if the language lacked support for
+would you structure the program if the language lacked support for
 inheritance? The answer may be compelling.</p>
 
 <p>Dependency injection typically makes use of traits,</p>
@@ -1673,7 +1673,7 @@ def isIdAuthed(id: Int): Future[Boolean] =
 
 <h4>Style</h4>
 
-<p>Future callback methods (<code>respond</code>, <code>onSuccess',</code>onFailure<code>,</code>ensure`)
+<p>Future callback methods (<code>respond</code>, <code>onSuccess</code>, <code>onFailure</code>, <code>ensure</code>)
 return a new future that is <em>chained</em> to its parent. This future is guaranteed
 to be completed only after its parent, enabling patterns like</p>
 
@@ -1690,14 +1690,14 @@ future onSuccess { value =&gt;
 <p>Use <code>onSuccess</code> instead of <code>foreach</code> &mdash; it is symmetrical to <code>onFailure</code> and
 is a better name for the purpose, and also allows for chaining.</p>
 
-<p>Always try to avoid creating your own <code>Promise</code>s: nearly every task
+<p>Always try to avoid creating <code>Promise</code> instances directly: nearly every task
 can be accomplished via the use of predefined combinators. These
 combinators ensure errors and cancellations are propagated, and generally
 encourage <em>dataflow style</em> programming which usually <a
 href="#Concurrency-Futures">obviates the need for synchronization and
 volatility declarations</a>.</p>
 
-<p>Code written in tail-recursive style are not subject so space leaks,
+<p>Code written in tail-recursive style is not subject to stack-space leaks,
 allowing for efficient implementation of loops in dataflow-style:</p>
 
 <pre><code>case class Node(parent: Option[Node], ...)
@@ -1727,7 +1727,7 @@ propagated to its producer. The producer uses <code>onCancellation</code> on
 <code>Promise</code> to listen to this signal and act accordingly.</p>
 
 <p>This means that the cancellation semantics depend on the producer,
-and there is no default implementation. <em>Cancellation is a but a hint</em>.</p>
+and there is no default implementation. <em>Cancellation is but a hint</em>.</p>
 
 <h4>Locals</h4>
 
@@ -1764,10 +1764,223 @@ creating &ldquo;stack traces&rdquo; for future callbacks &mdash; where any other
 would unduly burden the user. Locals are inappropriate in almost any
 other situation.</p>
 
-<!--
-  ### Offer/Broker
+<p><a id="Twitter's standard libraries-Offer/Broker" /></p>
 
--->
+<h3>Offer/Broker</h3>
+
+<p>Concurrent systems are greatly complicated by the need to coordinate
+access to shared data and resources.
+<a href="http://www.scala-lang.org/api/current/scala/actors/Actor.html">Actors</a>
+present one strategy of simplification: each actor is a sequential process
+that maintains its own state and resources, and data is shared by
+messaging with other actors. Sharing data requires communicating between
+actors.</p>
+
+<p>Offer/Broker builds on this in three important ways. First,
+communication channels (Brokers) are first class &mdash; that is, you send
+messages via Brokers, not to an actor directly. Secondly, Offer/Broker
+is a synchronous mechanism: to communicate is to synchronize. This
+means we can use Brokers as a coordination mechanism: when process <code>a</code>
+has sent a message to process <code>b</code>; both <code>a</code> and <code>b</code> agree on the state
+of the system. Lastly, communication can be performed <em>selectively</em>: a
+process can propose several different communications, and exactly one
+of them will obtain.</p>
+
+<p>In order to support selective communication (as well as other
+composition) in a general way, we need to decouple the description of
+a communication from the act of communicating. This is what an <code>Offer</code>
+does &mdash; it is a persistent value that describes a communication; in
+order to perform that communication (act on the offer), we synchronize
+via its <code>sync()</code> method</p>
+
+<pre><code>trait Offer[T] {
+  def sync(): Future[T]
+}
+</code></pre>
+
+<p class="LP">which returns a <code>Future[T]</code> that yields the exchanged value when the communication obtains.</p>
+
+<p>A <code>Broker</code> coordinates the exchange of values through offers &mdash; it is the channel of communications:</p>
+
+<pre><code>trait Broker[T] {
+  def send(msg: T): Offer[Unit]
+  val recv: Offer[T]
+}
+</code></pre>
+
+<p class="LP">so that, when creating two offers</p>
+
+<pre><code>val b: Broker[Int]
+val sendOf = send(1)
+val recvOf = b.recv
+</code></pre>
+
+<p class="LP">and <code>sendOf</code> and <code>recvOf</code> are both synchronized</p>
+
+<pre><code>// In process 1:
+sendOf.sync()
+
+// In process 2:
+recvOf.sync()
+</code></pre>
+
+<p class="LP">both offers obtain and the value <code>1</code> is exchanged.</p>
+
+<p>Selective communication is performed by combining several offers with
+<code>Offer.choose</code></p>
+
+<pre><code>def choose[T](ofs: Offer[T]*): Offer[T]
+</code></pre>
+
+<p class="LP">which yields a new offer that, when synchronized, obtains exactly one of <code>ofs</code> &mdash; the first one to become available. When several are available immediatley, one is chosen at random to obtain.</p>
+
+<p>The <code>Offer</code> object has a number of one-off Offers that are used to compose with Offers from a Broker.</p>
+
+<pre><code>Offer.timeout(duration): Offer[Unit]
+</code></pre>
+
+<p class="LP">Is an offer that activates after the given duration after the given duration. <code>Offer.never</code> will never obtain, and <code>Offer.const(value)</code> obtains immediately with the given value. These are useful for composition via selective communication. For example to apply a timeout on a send operation:</p>
+
+<pre><code>Offer.choose(
+  Offer.timeout(10.seconds),
+  broker.send(&quot;my value&quot;)
+).sync()
+</code></pre>
+
+<p>It may be tempting to compare the use of Offer/Broker to
+<a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/SynchronousQueue.html">SynchronousQueue</a>,
+but they are different in subtle but important ways. Offers can be composed in ways that such queues simply cannot. For example, consider a set of queues, represented as Brokers:</p>
+
+<pre><code>val q0 = new Broker[Int]
+val q1 = new Broker[Int]
+val q2 = new Broker[Int]
+</code></pre>
+
+<p class="LP">Now let's create a merged queue for reading:</p>
+
+<pre><code>val anyq: Offer[Int] = Offer.choose(q0.recv, q1.recv, q2.recv)
+</code></pre>
+
+<p class="LP"><code>anyq</code> is an offer that will read from first available queue. Note that <code>anyq</code> is <em>still synchronous</em> &mdash; we still have the semantics of the underlying queues. Such composition is simply not possible using queues.</p>
+
+<h4>Example: A Simple Connection Pool</h4>
+
+<p>Connection pools are common in network applications, and they&rsquo;re often
+tricky to implement &mdash; for example, it&rsquo;s often desirable to have
+timeouts on acquisition from the pool since various clients have different latency
+requirements. Pools are simple in principle: we maintain a queue of
+connections, and we satisfy waiters as they come in. With traditional
+synchronization primitives this typically involves keeping two queues:
+one of waiters (when there are no connections), and one of connections
+(when there are no waiters).</p>
+
+<p>Using Offer/Brokers, we can express this quite naturally:</p>
+
+<pre><code>class Pool(conns: Seq[Conn]) {
+  private[this] val waiters = new Broker[Conn]
+  private[this] val returnConn = new Broker[Conn]
+
+  val get: Offer[Conn] = waiters.recv
+  def put(c: Conn) { returnConn ! c }
+
+  private[this] def loop(connq: Queue[Conn]) {
+    Offer.choose(
+      if (connq.isEmpty) Offer.never else {
+        val (head, rest) = connq.dequeue
+        waiters.send(head) { _ =&gt; loop(rest) }
+      },
+      returnConn.recv { c =&gt; loop(connq enqueue c) }
+    ).sync()
+  }
+
+  loop(Queue.empty ++ conns)
+}
+</code></pre>
+
+<p><code>loop</code> will always offer to have a connection returned, but only offer
+to send one when the queue is nonempty. Using a persistent queue simplifies
+reasoning further. The interface to the pool is also through an Offer, so if a caller
+wishes to apply a timeout, they can do so through the use of combinators:</p>
+
+<pre><code>val conn: Future[Option[Conn]] = Offer.choose(
+  pool.get { conn =&gt; Some(conn) },
+  Offer.timeout(1.second) { _ =&gt; None }
+).sync()
+</code></pre>
+
+<p>No extra bookkeeping was required to implement timeouts; this is due to
+the semantics of Offers: if <code>Offer.timeout</code> is selected, there is no
+longer an offer to receive from the pool &mdash; the pool and its caller
+never simultaneously agreed to receive and send, respectively, on the
+<code>waiters</code> broker.</p>
+
+<h4>Example: Sieve of Eratosthenes</h4>
+
+<p>It is often useful &mdash; and sometimes vastly simplifying &mdash; to structure
+concurrent programs as a set of sequential processes that communicate
+synchronously. Offers and Brokers provide a set of tools to make this simple
+and uniform. Indeed, their application transcends what one might think
+of as &ldquo;classic&rdquo; concurrency problems &mdash; concurrent programming (with
+the aid of Offer/Broker) is a useful <em>structuring</em> tool, just as
+subroutines, classes, and modules are &mdash; another important
+idea from CSP.</p>
+
+<p>One example of this is the <a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of
+Eratosthenes</a>,
+which can be structured as a successive application of filters to a
+stream of integers. First, we&rsquo;ll need a source of integers:</p>
+
+<pre><code>def integers(from: Int): Offer[Int] = {
+  val b = new Broker[Int]
+  def gen(n: Int): Unit = b.send(n).sync() ensure gen(n + 1)
+  gen(from)
+  b.recv
+}
+</code></pre>
+
+<p class="LP"><code>integers(n)</code> is simply the offer of all consecutive integers starting at <code>n</code>. Then we need a filter:</p>
+
+<pre><code>def filter(in: Offer[Int], prime: Int): Offer[Int] = {
+  val b = new Broker[Int]
+  def loop() {
+    in.sync() onSuccess { i =&gt;
+      if (i % prime != 0)
+        b.send(i).sync() ensure loop()
+      else
+        loop()
+    }
+  }
+  loop()
+
+  b.recv
+}
+</code></pre>
+
+<p class="LP"><code>filter(in, p)</code> returns the offer that removes multiples of the prime <code>p</code> from <code>in</code>. Finally, we define our sieve:</p>
+
+<pre><code>def sieve = {
+  val b = new Broker[Int]
+  def loop(of: Offer[Int]) {
+    for (prime &lt;- of.sync(); _ &lt;- b.send(prime).sync())
+      loop(filter(of, prime))
+  }
+  loop(integers(2))
+  b.recv
+}
+</code></pre>
+
+<p class="LP"><code>loop()</code> works simply: it reads the next (prime) number from <code>of</code>, and then applies a filter to <code>of</code> that excludes this prime. As <code>loop</code> recurses, successive primes are filtered, and we have a Sieve. We can now print out the first 10000 primes:</p>
+
+<pre><code>val primes = sieve
+0 until 10000 foreach { _ =&gt;
+  println(primes.sync()())
+}
+</code></pre>
+
+<p>Besides being structured into simple, orthogonal components, this
+approach gives you a streaming Sieve: you do not a-priori need to
+compute the set of primes you are interested in, further enhancing
+modularity.</p>
 
 <p><a id="Acknowledgments" /></p>
 
@@ -1776,8 +1989,8 @@ other situation.</p>
 <p>The lessons herein are those of Twitter&rsquo;s Scala community &mdash; I hope
 I&rsquo;ve been a faithful chronicler.</p>
 
-<p>Blake Matheny, Nick Kallen, and Steve Gury provided much helpful
-guidance and many excellent suggestions.</p>
+<p>Blake Matheny, Nick Kallen, Steve Gury, and Raghavendra Prabhu
+provided much helpful guidance and many excellent suggestions.</p>
 
 <hr/>
 <ol id="notes">
